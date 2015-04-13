@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }}</title>
+        {% endif %}
+    </head>
+
+    <body>
+        
+        <div> jmickey.net.au: <a href="{{ url_for('index') }}">Home</a>
+        </div>
+        {% block content %}{% endblock %}
+    
+    </body>
+</html>

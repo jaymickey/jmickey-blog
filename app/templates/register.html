@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Register</h1>
+    <form action="" method="post" name="register">
+        {{ form.hidden_tag() }}
+        <div>
+             {{ form.username.label }}: {{ form.username(size=24) }}
+        </div>
+        <div>
+            {{ form.first_name.label }}: {{ form.first_name(size=24) }}
+        </div>
+        <div>
+            {{ form.last_name.label }}: {{ form.last_name(size=24) }}
+        </div>
+        <div>
+            {{ form.email.label }}: {{ form.email(size=24) }}
+        </div>
+        <div>
+            {{ form.password.label }}: {{ form.password(size=24) }}
+        </div>
+        <div>
+            <input type="submit" value="Register">
+        </div>
+    </form>
+{% endblock %}
