@@ -1,0 +1,6 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Welcome to the blog</h1>
+    {% if g.user.is_authenticated() %}Welcome back {{ g.user.first_name }}{% endif %}
+{% endblock %}

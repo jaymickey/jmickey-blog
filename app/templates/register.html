@@ -19,6 +19,11 @@
         <div>
             {{ form.password.label }}: {{ form.password(size=24) }}
         </div>
+        {% for error in form.errors %}
+        <ul>
+            <li>{{ error }}</li>
+        </ul>
+        {% endfor %}
         <div>
             <input type="submit" value="Register">
         </div>

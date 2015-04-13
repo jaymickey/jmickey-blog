@@ -17,3 +17,6 @@ class User(db.Model):
     
   def is_anonymous(self):
     return False
+
+  def get_id(self):
+    return str(self.id)

@@ -3,11 +3,22 @@ from wtforms import StringField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
 from app.models import User
 from app import db
+from werkzeug.security import check_password_hash
 
 class LoginForm(Form):
-  username = StringField('username', validators = [DataRequired()])
-  password = StringField('password', validators = [DataRequired(), Length(min = 8)])
-  remember_me = BooleanField('remember_me', default = False)
+  username = StringField('Username', validators = [DataRequired()])
+  password = PasswordField('Password', validators = [DataRequired(), Length(min = 8)])
+  remember_me = BooleanField('Remember Me', default = False)
+
+  def validate_username(self, field):
+    user = db.session.query(User).filter_by(username=self.username.data).first()
+    if user is None:
+      raise ValidationError('User does not exist')
+   
+  def validate_password(self, field):
+    user = db.session.query(User).filter_by(username=self.username.data).first()
+    if not check_password_hash(user.password, self.password.data):
+      raise ValidationError('Password is incorrect')
   
 class RegisterForm(Form):
   first_name = StringField('First Name', validators = [DataRequired()])
