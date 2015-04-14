@@ -12,10 +12,12 @@
         <div>
             {{ form.remember_me.label }}{{ form.remember_me }}
         </div>
-        {% for error in form.errors %}
+        {% for fields in form %}
+        {% for error in fields.errors %}
         <ul>
             <li>{{ error }}</li>
         </ul>
+        {% endfor %}
         {% endfor %}
         <div>
             <input type="submit" value="Login"

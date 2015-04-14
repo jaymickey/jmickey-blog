@@ -12,13 +12,14 @@ class LoginForm(Form):
 
   def validate_username(self, field):
     user = db.session.query(User).filter_by(username=self.username.data).first()
-    if user is None:
+    if user == None:
       raise ValidationError('User does not exist')
-   
+
   def validate_password(self, field):
     user = db.session.query(User).filter_by(username=self.username.data).first()
-    if not check_password_hash(user.password, self.password.data):
-      raise ValidationError('Password is incorrect')
+    if user != None:
+      if not check_password_hash(user.password, self.password.data):
+        raise ValidationError('Password is incorrect')
   
 class RegisterForm(Form):
   first_name = StringField('First Name', validators = [DataRequired()])

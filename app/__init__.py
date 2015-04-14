@@ -11,6 +11,6 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-admin = Admin(app, index_view=View1())
+admin = Admin(app, index_view=AdminIndex())
 
 from app import views, models
