@@ -22,6 +22,9 @@ class User(db.Model):
   def get_id(self):
     return str(self.id)
     
+  def __repr__(self):
+    return '%r' % (self.username)
+    
 class Post(db.Model):
   id = db.Column(db.Integer, primary_key = True)
   title = db.Column(db.String(64), index = True, unique = True)

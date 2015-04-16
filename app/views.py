@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from .models import User
+from .models import User, Post
 from .forms import RegisterForm, LoginForm
 from app import app, db, lm
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,7 +13,8 @@ def load_user(id):
 @app.route('/index')
 def index():
   g.user = current_user
-  return render_template('index.html', title='Blog Home')
+  posts = Post.query.order_by(Post.id.desc())
+  return render_template('index.html', title='Blog Home', posts=posts)
   
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -39,3 +40,10 @@ def login():
 def logout():
   logout_user()
   return redirect(url_for('index'))
+  
+@app.route('/admin')
+@login_required
+def admin():
+  posts = Post.query.filter_by(user_id = current_user.id)
+  posts = posts.order_by(Post.id.desc())
+  return render_template('admin.html', title='Admin Home', posts = posts)
