@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, BooleanField, PasswordField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
 from app.models import User
 from app import db
@@ -35,3 +35,9 @@ class RegisterForm(Form):
   def validate_email(self, field):
     if db.session.query(User).filter_by(email=self.email.data).count() > 0:
       raise ValidationError('Email already in use.')
+
+class NewPost(Form):
+  title = StringField('Title', validators = [DataRequired("Please enter a title!")])
+  post_body = TextAreaField('Post Body', validators = [DataRequired("Please enter a post body!")])
+  tags = StringField('Tags', validators = [DataRequired("Please enter post tags!")])
+  

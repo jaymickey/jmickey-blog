@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class='col-xs-12 col-md-8 col-md-offset-2'>
+        <h2>Create New Post</h2>
+        <form action="" method="post" name="new_post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger" role="alert">
+                          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                          <span class="sr-only">Error:</span>
+                          {{ error }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {{ form.title.label }}:
+                {{ form.title(class_="form-control", placeholder="Enter a title...") }}
+            </div>
+            <div class="form-group">
+                {{ form.post_body.label }}:
+                {{ form.post_body(rows="10", class_="form-control mdm-input", placeholder="Enter post contents...") }}
+            </div>
+            <div class="form-group form-inline">
+                {{ form.tags.label }}: {{ form.tags(class_="form-control", placeholder="Enter tags for post...") }}
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary"></input>
+            </div>
+        </form>
+{% endblock %}

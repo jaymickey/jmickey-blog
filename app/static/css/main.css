@@ -12,8 +12,16 @@ body {
   padding-right: 10px;
 }
 
+#current-post-title {
+  float: left;
+}
+
 .btn-new-post {
-  position: absolute;
-  right: 0px;
+  float: right;
+  margin-top: 10px;
+}
+
+#post-table {
+  padding-top: 15px;
 }
 

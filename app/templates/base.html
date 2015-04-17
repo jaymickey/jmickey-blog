@@ -7,10 +7,10 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/mdmagick.css') }}" rel="stylesheet" />
     </head>
-
     <body>
         <div class="container">
             <nav class="navbar navbar-default navbar-inverse">
@@ -42,13 +42,14 @@
                     </div>
                 </div>
             </nav>
-            <div class="container">
-                <div>
+            <div>
                     {% block content %}{% endblock %}
-                </div>
             </div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/a-tools.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/showdown.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/mdmagick.js') }}"></script>
     </body>
 </html>

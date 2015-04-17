@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from .models import User, Post
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, NewPost
 from app import app, db, lm
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -47,3 +47,15 @@ def admin():
   posts = Post.query.filter_by(user_id = current_user.id)
   posts = posts.order_by(Post.id.desc())
   return render_template('admin.html', title='Admin Home', posts = posts)
+  
+@app.route('/admin/new_post', methods = ['GET', 'POST'])
+@login_required
+def new_post():
+  form = NewPost()
+  if form.validate_on_submit():
+    post = Post(title=form.title.data, body=form.post_body.data, user_id=current_user.id)
+    db.session.add(post)
+    db.session.commit()
+    new_post_message = flash("New post created successfully")
+    return redirect(url_for('admin'))
+  return render_template('new_post.html', title='Create New Post', form=form)

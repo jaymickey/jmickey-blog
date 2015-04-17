@@ -1,25 +1,21 @@
 ﻿{% extends 'base.html' %}
 {% set active_page = 'index' %}
-
 {% block content %}
-    <div class="col-sm-8">    
-        <h1>Welcome to the blog</h1>
-        {% for post in posts %}
-            <div class="">
-                <div>
-                    <h2>{{ post.title }}</h2>
-                    <p>Posted by {{ post.author.first_name }} {{ post.author.last_name }}</i></p>
-                    <hr />
+                <div class="col-sm-8">
+                    {% for post in posts %}
+                    <div>
+                        <h2>{{ post.title }}</h2>
+                        <p>Posted by {{ post.author.first_name }} {{ post.author.last_name }}</p>
+                        <hr />
+                    </div>
+                    <div>
+                        <p>{{ post.body | safe }}</p>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div class="">
-                    {{ post.body }}
+                <div class="col-sm-4">
+                    <div class="sidebar">
+                        <h3>Bio Here</h3>
+                    </div>
                 </div>
-            </div>
-    {% endfor %}
-    </div>
-    <div class="col-sm-4" style="padding: 15px;">
-        <div class="sidebar">
-            <h3>Bio Here</h2>
-        </div>
-    </div>
 {% endblock %}
