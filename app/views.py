@@ -2,8 +2,9 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from .models import User, Post
 from .forms import RegisterForm, LoginForm, NewPost
-from app import app, db, lm
+from app import app, db, lm, md
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 @lm.user_loader
 def load_user(id):
@@ -53,9 +54,21 @@ def admin():
 def new_post():
   form = NewPost()
   if form.validate_on_submit():
-    post = Post(title=form.title.data, body=form.post_body.data, user_id=current_user.id)
+    post = Post(title=form.title.data, body=form.post_body.data, timestamp = datetime.utcnow(), user_id=current_user.id)
     db.session.add(post)
     db.session.commit()
     new_post_message = flash("New post created successfully")
     return redirect(url_for('admin'))
   return render_template('new_post.html', title='Create New Post', form=form)
+  
+@app.route('/admin/edit_post/<id>', methods = ['GET', 'POST'])
+@login_required
+def edit_post(id):
+  post = Post.query.get(id)
+  form = NewPost(title=post.title, post_body=post.body)
+  if form.validate_on_submit():
+    post.title = form.title.data
+    post.body = form.post_body.data
+    db.session.commit()
+    return redirect(url_for('admin'))
+  return render_template('edit_post.html', form=form)

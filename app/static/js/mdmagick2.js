@@ -5,7 +5,7 @@
   * author: http://fernandoguillen.info
   * demo page: http://fguillen.github.com/MDMagick/
 
-  ## Versión
+  ## Version
 
       v0.0.3
 
@@ -34,7 +34,7 @@ function MDM( inputElement ) {
 
   this.activateControls = function( controlsElement ){
     var _self = this;
-    ["bold", "italic", "link", "title", "list", "img"].forEach( function( actionName ){
+    ["bold", "italic", "link", "title", "list", "quote", "code", "multilineCode", "img", "strike", "gist"].forEach( function( actionName ){
       $( controlsElement ).find( ".mdm-" + actionName ).click( function( event ){ _self.action( actionName, event ) } );
     });
   };
@@ -101,8 +101,19 @@ MDM.Actions = {
 
   link: function( inputElement ){
     var link = prompt( "Link to URL", "http://" );
-    var selection = $( inputElement ).getSelection();
-    $( inputElement ).replaceSelection( "[" + selection.text + "](" + link + ")" );
+    if(link) {
+        var selection = $( inputElement ).getSelection();
+        var objectValue = $(inputElement).val();
+        if(!selection.text){
+            $(inputElement).val(objectValue + "\n" + 'link description');
+            $(inputElement).setCaretPos(-1);
+            MDM.Utils.selectWholeLines( inputElement );
+            selection = $( inputElement ).getSelection();
+        }
+
+        $( inputElement ).replaceSelection( "[" + selection.text + "](" + link + ")" );
+        $( inputElement ).setSelection(selection.start + 1, selection.end + 1); //select description text
+    }
   },
 
   title: function( inputElement ){
@@ -124,6 +135,58 @@ MDM.Actions = {
     }
 
     $( inputElement ).replaceSelection( result );
+  },
+
+  quote: function( inputElement ){
+    var selection = $( inputElement ).getSelection();
+    $( inputElement ).replaceSelection( "~~" + selection.text + "~~" );
+  },
+
+  strike: function( inputElement ){
+    var selection = $( inputElement ).getSelection();
+    $( inputElement ).replaceSelection( "--" + selection.text + "--" );
+  },
+
+  code: function( inputElement ){
+    var selection = $( inputElement ).getSelection();
+    $( inputElement ).replaceSelection( "`" + selection.text + "`" );
+  },
+
+  multilineCode: function( inputElement ){
+    var selection = $( inputElement ).getSelection();
+    //TODO: cut all empty lines from selection.text
+    $( inputElement ).replaceSelection( "[code]\n" + selection.text + "\n[/code]" );
+  },
+
+  img: function( inputElement ){
+    var link = prompt( "Image URL", "http://" );
+    if(link) {
+        var selection = $( inputElement ).getSelection();
+        var objectValue = $(inputElement).val();
+        if(!selection.text){
+            $(inputElement).val(objectValue + "\n" + 'img description');
+            $(inputElement).setCaretPos(-1);
+            MDM.Utils.selectWholeLines( inputElement );
+            selection = $( inputElement ).getSelection();
+        }
+
+        $( inputElement ).replaceSelection( "![" + selection.text + "](" + link + ")" );
+        $( inputElement ).setSelection(selection.start + 2, selection.end + 2); //select description text
+    }
+  },
+
+  gist: function( inputElement ){
+    var string = prompt( "GitHub Gist ID", "" );
+    if(string) {
+        var selection = $( inputElement ).getSelection();
+        var objectValue = $(inputElement).val();
+        if(!selection.text){
+            $(inputElement).val(objectValue + "\n" + 'link description');
+            $(inputElement).setCaretPos(-1);
+            MDM.Utils.selectWholeLines( inputElement );
+        }
+        $( inputElement ).replaceSelection( "\n[gist]" + string + "[/gist]\n" );
+    }
   }
 }
 
@@ -136,6 +199,7 @@ MDM.Utils = {
   },
 
   appendPreview: function( inputElement ){
+    return false;
     var element = $( MDM.Utils.previewTemplate() );
     element.css( "width", $( inputElement ).css( "width" ) );
     // element.css( "padding", $( inputElement ).css( "padding" ) );
@@ -164,14 +228,21 @@ MDM.Utils = {
   },
 
   controlsTemplate: function(){
+
     var template =
       "<div class=\"mdm-buttons mdm-control\">" +
       "  <ul>" +
-      "    <li class=\"mdm-bold\"><a class=\"mdm-icon-bold\" href=\"#mdm-bold\"><span>B</span></a></li>" +
-      "    <li class=\"mdm-italic\"><a class=\"mdm-icon-italic\" href=\"#mdm-italic\"><span>I</span></a></li>" +
-      "    <li class=\"mdm-link\"><a class=\"mdm-icon-link\" href=\"#mdm-link\"><span>a</span></a></li>" +
-      "    <li class=\"mdm-list\"><a class=\"mdm-icon-list\" href=\"#mdm-list\"><span>l</span></a></li>" +
-      "    <li class=\"mdm-title\"><a class=\"mdm-icon-title\" href=\"#mdm-title\"><span>T</span></a></li>" +
+      "    <li class=\"mdm-bold\"><a tabindex=\"-1\" title=\"bold\" class=\"icon-bold\" href=\"#mdm-bold\"><span>B</span></a></li>" +
+      "    <li class=\"mdm-italic\"><a tabindex=\"-1\" title=\"italic\" class=\"icon-italic\" href=\"#mdm-italic\"><span>I</span></a></li>" +
+      "    <li class=\"mdm-strike\"><a tabindex=\"-1\" title=\"strikethrough\" class=\"icon-strikethrough\" href=\"#mdm-strike\"><span>S</span></a></li>" +
+      "    <li class=\"mdm-title\"><a tabindex=\"-1\" title=\"height\" class=\"icon-text-height\" href=\"#mdm-title\"><span>T</span></a></li>" +
+      "    <li class=\"mdm-quote\"><a tabindex=\"-1\" title=\"blockquote\" class=\"icon-comment-alt\" href=\"#mdm-quote\"><span>Q</span></a></li>" +
+      "    <li class=\"mdm-code\"><a tabindex=\"-1\" title=\"code\" class=\"icon-code\" href=\"#mdm-code\"><span>C</span></a></li>" +
+      "    <li class=\"mdm-multilineCode\"><a tabindex=\"-1\" title=\"multiline-code\" class=\"icon-terminal\" href=\"#mdm-multilineCode\"><span>MLC</span></a></li>" +
+      "    <li class=\"mdm-list\"><a tabindex=\"-1\" title=\"list\" class=\"icon-list-ul\" href=\"#mdm-list\"><span>l</span></a></li>" +
+      "    <li class=\"mdm-link\"><a tabindex=\"-1\" title=\"link\" class=\"icon-link\" href=\"#mdm-link\"><span>a</span></a></li>" +
+      "    <li class=\"mdm-img\"><a tabindex=\"-1\" title=\"img\" class=\"icon-picture\" href=\"#mdm-img\"><span>Img</span></a></li>" +
+      "    <li class=\"mdm-gist\"><a tabindex=\"-1\" title=\"GitHub Gist\" class=\"icon-github bigger\" href=\"#mdm-gist\"><span>G</span></a></li>" +
       "  </ul>" +
       "</div>";
 

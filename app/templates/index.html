@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% set active_page = 'index' %}
 {% block content %}
                 <div class="col-sm-8">
@@ -9,7 +9,7 @@
                         <hr />
                     </div>
                     <div>
-                        <p>{{ post.body | safe }}</p>
+                        <p>{{ post.body | markdown }}</p>
                     </div>
                     {% endfor %}
                 </div>

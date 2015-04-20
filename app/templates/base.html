@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         {% if title %}
@@ -10,11 +10,12 @@
         <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" />
         <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
         <link href="{{ url_for('static', filename='css/mdmagick.css') }}" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
     </head>
     <body>
         <div class="container">
-            <nav class="navbar navbar-default navbar-inverse">
-                <div class="container-fluid">
+            <nav class="navbar navbar-fixed-top navbar-inverse">
+                <div class="container">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                             <span class="sr-only">Toggle navigation</span>
@@ -46,10 +47,10 @@
                     {% block content %}{% endblock %}
             </div>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/a-tools.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/showdown.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/mdmagick.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/a-tools.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ url_for('static', filename='js/showdown.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ url_for('static', filename='js/mdmagick.js') }}" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>

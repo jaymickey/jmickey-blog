@@ -77,13 +77,13 @@ div.mdm-preview.focus {
 }
 
 div.mdm-buttons {
-  width: 148px;
-
+  padding-left: 0px;
   font-size: 12px;
 }
 
 div.mdm-buttons ul {
   margin: 10px;
+  padding-left: 0px;
 }
 
 div.mdm-buttons ul li{
