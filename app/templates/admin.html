@@ -26,7 +26,7 @@
                             <td>{{ post.id | safe }}</td>
                             <td>{{ post.title | safe }}</td>
                             <td>{{ post.timestamp | safe }}</td>
-                            <td><a href="{{ url_for('edit_post', id=post.id) }}"><span class="glyphicon glyphicon-pencil admin-glyph" aria-hidden="true"></span>   <span class="glyphicon glyphicon-trash admin-glyph" aria-hidden="true"></span></a></td>
+                            <td><a href="{{ url_for('edit_post', id=post.id) }}"><span class="glyphicon glyphicon-pencil admin-glyph" aria-hidden="true"></span></a><span class="glyphicon glyphicon-trash admin-glyph" aria-hidden="true"></span></td>
                         </tr>
                     {% endfor %}
                     </tbody>

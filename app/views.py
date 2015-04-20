@@ -54,7 +54,8 @@ def admin():
 def new_post():
   form = NewPost()
   if form.validate_on_submit():
-    post = Post(title=form.title.data, body=form.post_body.data, timestamp = datetime.utcnow(), user_id=current_user.id)
+    post_body =  form.post_body.data.replace('\n', '<br />')
+    post = Post(title=form.title.data, body=post_body, timestamp = datetime.utcnow(), user_id=current_user.id)
     db.session.add(post)
     db.session.commit()
     new_post_message = flash("New post created successfully")
@@ -68,7 +69,7 @@ def edit_post(id):
   form = NewPost(title=post.title, post_body=post.body)
   if form.validate_on_submit():
     post.title = form.title.data
-    post.body = form.post_body.data
+    post.body = form.post_body.data.replace('\n', '<br />')
     db.session.commit()
     return redirect(url_for('admin'))
   return render_template('edit_post.html', form=form)
