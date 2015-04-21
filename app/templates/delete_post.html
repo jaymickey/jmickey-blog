@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class='col-xs-12 col-md-8 col-md-offset-2'>
+        <h2>Delete Post</h2>
+        <form action="{{ url_for('delete_post', id=post.id) }}" method="post" name="delete_post">
+            <p>Are you sure you wish to delete post: </p>
+            <p>{{ post.title | safe }}</p>
+            <input type="submit" value="Delete" class="btn btn-primary"></input>
+            <a href="{{ url_for('admin') }}"><input type="button" value="Cancel" class="btn btn-warning"></input></a>
+        </form>
+    </div>
+{% endblock %}

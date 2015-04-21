@@ -72,4 +72,14 @@ def edit_post(id):
     post.body = form.post_body.data.replace('\n', '<br />')
     db.session.commit()
     return redirect(url_for('admin'))
-  return render_template('edit_post.html', form=form)
+  return render_template('edit_post.html', title = 'Edit Post', form=form)
+
+@app.route('/admin/delete_post/<id>', methods = ['GET', 'POST'])
+@login_required
+def delete_post(id):
+  post = Post.query.get(id)
+  if request.method == 'POST':
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('admin'))
+  return render_template('delete_post.html', title = 'Delete Post', post=post)
