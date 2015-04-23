@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-xs-12 col-md-8">
+        <div class="post">
+            <h1 class="post-title">{{ post.title }}</h1>
+            <div class="post-author">
+                Posted by <a href="{{ url_for('user_profile', username=post.author.username ) }}" class="label label-info">{{ post.author.first_name }} {{ post.author.last_name }}</a>
+            </div>
+            <div class="post-body">
+                <p>{{ post.body | markdown }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

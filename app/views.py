@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from .models import User, Post
-from .forms import RegisterForm, LoginForm, NewPost
+from .forms import RegisterForm, LoginForm, NewPost, EditUser
 from app import app, db, lm, md
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -55,10 +55,11 @@ def new_post():
   form = NewPost()
   if form.validate_on_submit():
     post_body =  form.post_body.data.replace('\n', '<br />')
-    post = Post(title=form.title.data, body=post_body, timestamp = datetime.utcnow(), user_id=current_user.id)
+    title_slug = form.generate_slug(form.title.data)
+    post = Post(title=form.title.data, title_slug=title_slug, body=post_body, timestamp = datetime.utcnow(), user_id=current_user.id)
     db.session.add(post)
     db.session.commit()
-    new_post_message = flash("New post created successfully")
+    flash("New post created successfully", "alert-success")
     return redirect(url_for('admin'))
   return render_template('new_post.html', title='Create New Post', form=form)
   
@@ -69,6 +70,7 @@ def edit_post(id):
   form = NewPost(title=post.title, post_body=post.body)
   if form.validate_on_submit():
     post.title = form.title.data
+    post.title_slug = form.generate_slug(form.title.data)
     post.body = form.post_body.data.replace('\n', '<br />')
     db.session.commit()
     return redirect(url_for('admin'))
@@ -81,5 +83,31 @@ def delete_post(id):
   if request.method == 'POST':
     db.session.delete(post)
     db.session.commit()
+    flash('Post deleted successfully!', 'alerlt-success')
     return redirect(url_for('admin'))
   return render_template('delete_post.html', title = 'Delete Post', post=post)
+  
+@app.route('/profile/<username>', methods=['GET'])
+def user_profile(username):
+  user = User.query.filter_by(username=username).first()
+  return render_template('user.html', title=user.username+' Profile', user=user)
+
+@app.route('/profile/<username>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_user(username):
+  user = User.query.filter_by(username=username).first()
+  form = EditUser(obj=user, orig_user=user.username, orig_email=user.email)
+  if current_user.id != user.id:
+    flash('Can only edit own profile!', 'alert-warning')
+    return redirect(url_for('index'))
+  if form.validate_on_submit():
+    form.populate_obj(user)
+    db.session.commit()
+    flash('Profile edited successfully!', 'alert-success')
+    return redirect(url_for('user_profile', username = user.username))
+  return render_template('edit_user.html', title='Edit Profile: '+user.username, user=user, form=form)
+  
+@app.route('/post/<title_slug>')
+def single_post(title_slug):
+  post = Post.query.filter_by(title_slug = title_slug).first()
+  return render_template('single_post.html', title=post.title+' - Blog', post=post)

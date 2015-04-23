@@ -25,3 +25,25 @@ body {
   padding-top: 15px;
 }
 
+.post-author {
+  font-size: 100%;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  line-height: 150%;
+  vertical-align: center;
+}
+
+.post-title {
+  padding-bottom: 0px;
+  margin-bottom: 2px;
+}
+
+.post-title a {
+  text-decoration: none;
+  color: #666;
+}
+
+.post-title a:hover {
+  color: #000;
+}
