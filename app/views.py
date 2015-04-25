@@ -5,6 +5,7 @@ from .forms import RegisterForm, LoginForm, NewPost, EditUser
 from app import app, db, lm, md
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from sqlalchemy import func
 
 @lm.user_loader
 def load_user(id):
@@ -21,10 +22,12 @@ def index():
 def register():
   form = RegisterForm()
   if form.validate_on_submit():
-    user = User(first_name=form.first_name.data, last_name=form.last_name.data, username=form.username.data, email=form.email.data)
+    user = User()
+    form.populate_obj(user)
     user.password = generate_password_hash(form.password.data)
     db.session.add(user)
     db.session.commit()
+    flash('Registration Successful, you can now login', 'alert-success')
     return redirect(url_for('index'))
   return render_template('register.html', title='Register', form = form)
 
@@ -32,7 +35,8 @@ def register():
 def login():
   form = LoginForm()
   if form.validate_on_submit():
-    user = User.query.filter_by(username=form.username.data).first()
+    username = form.username.data.lower()
+    user = User.query.filter(func.lower(username)==username.lower()).first()
     login_user(user, remember=form.remember_me.data)
     return redirect(request.args.get('next') or url_for('index'))
   return render_template('login.html',title='Login', form=form)
@@ -89,13 +93,14 @@ def delete_post(id):
   
 @app.route('/profile/<username>', methods=['GET'])
 def user_profile(username):
-  user = User.query.filter_by(username=username).first()
-  return render_template('user.html', title=user.username+' Profile', user=user)
+  user = User.query.filter(func.lower(username)==username.lower()).first()
+  posts = Post.query.filter_by(user_id = user.id)
+  return render_template('user.html', title=user.username+' Profile', user=user, posts=posts)
 
 @app.route('/profile/<username>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_user(username):
-  user = User.query.filter_by(username=username).first()
+  user = User.query.filter(func.lower(username)==username.lower()).first()
   form = EditUser(obj=user, orig_user=user.username, orig_email=user.email)
   if current_user.id != user.id:
     flash('Can only edit own profile!', 'alert-warning')

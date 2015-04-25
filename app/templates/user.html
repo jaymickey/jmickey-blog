@@ -3,7 +3,22 @@
 
 {% block content %}
     <div class="col-xs-12 col-md-8">
-        <h1>{{ user.first_name | safe }} {{ user.last_name | safe }} {% if current_user.is_authenticated() and current_user.username == user.username %}<small><a href="{{ url_for('edit_user', username=user.username) }}">edit</a></small>{% endif %}</h1>
-        <p>{{ user.about_me | safe }}</p>
+        <div class="profile">
+            <h1>{{ user.first_name | safe }} {{ user.last_name | safe }} {% if current_user.is_authenticated() and current_user.username == user.username %}<small><a href="{{ url_for('edit_user', username=user.username) }}">edit</a></small>{% endif %}</h1>
+            <p>{{ user.about_me | safe }}</p>
+        </div>
+    {% if posts %}
+        {% for post in posts %}
+        <div class="post">
+            <h1 class="post-title">{{ post.title }}</h1>
+            <div class="post-author">
+                Posted by <a href="{{ url_for('user_profile', username=post.author.username ) }}" class="label label-info">{{ post.author.first_name }} {{ post.author.last_name }}</a>
+            </div>
+            <div class="post-body">
+                <p>{{ post.body | markdown }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
     </div>
 {% endblock %}

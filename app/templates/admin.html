@@ -2,13 +2,11 @@
 {% set active_page = 'admin' %}
 
 {% block content %}
-    <div>
-        <h2>Welcome {{ current_user.first_name }}</h2>
-    </div>
     <div class="col-xs-12 col-sm-6 col-md-8">
         <div class="row">
+            <h2>Welcome {{ current_user.first_name }}</h2>
             <h3 id="current-post-title">Current Posts:</h3>
-            <a href="{{ url_for('new_post') }}"><input type="button" class="btn btn-primary btn-new-post" value="New Post"></input></a>
+            <a href="{{ url_for('new_post') }}" class="btn btn-primary btn-new-post">Create Post</a>
             <div class="clearfix"></div>
             <div id="post-table" class="table-responsive">
                 <table class="table table-striped table-hover">

@@ -5,6 +5,7 @@ from app.models import User
 from app import db
 from werkzeug.security import check_password_hash
 from unidecode import unidecode
+from sqlalchemy import func
 import re
 
 class LoginForm(Form):
@@ -13,12 +14,12 @@ class LoginForm(Form):
   remember_me = BooleanField('Remember Me', default = False)
 
   def validate_username(self, field):
-    user = db.session.query(User).filter_by(username=self.username.data).first()
+    user = User.query.filter(func.lower(username)==self.username.data.lower()).first()
     if user == None:
       raise ValidationError('User does not exist')
 
   def validate_password(self, field):
-    user = db.session.query(User).filter_by(username=self.username.data).first()
+    user = User.query.filter(func.lower(username)==self.username.data).first()
     if user != None:
       if not check_password_hash(user.password, self.password.data):
         raise ValidationError('Password is incorrect')
@@ -31,11 +32,11 @@ class RegisterForm(Form):
   password = PasswordField('Password', validators = [DataRequired()])
   
   def validate_username(self, field):
-    if db.session.query(User).filter_by(username=self.username.data).count() > 0:
+    if User.query.filter(func.lower(username)==self.username.data.lower()).count() > 0:
       raise ValidationError('Username already exists.')
   
   def validate_email(self, field):
-    if db.session.query(User).filter_by(email=self.email.data).count() > 0:
+    if User.query.filter(func.lower(email)==email).count() > 0:
       raise ValidationError('Email already in use.')
 
 class NewPost(Form):
@@ -44,7 +45,7 @@ class NewPost(Form):
   tags = StringField('Tags', validators = [DataRequired("Please enter post tags!")])
   
   def generate_slug(self, title):
-    title_slug = unidecode(title).lower()
+    title_slug = unidecode(title).lower().rstrip(r' .?!(),[]{}')
     return re.sub(r'\W+', '-', title_slug)
 
 class EditUser(Form):
@@ -60,13 +61,13 @@ class EditUser(Form):
     self.orig_email = orig_email
     
   def validate_username(self, field):
-    if self.username.data == self.orig_user:
+    if self.orig_user and self.username.data.lower() == self.orig_user.lower():
       return True
-    if db.session.query(User).filter_by(username=self.username.data).count() > 0:
+    if User.query.filter(func.lower(User.username)==self.username.data.lower()).count() > 0:
       raise ValidationError('Username is taken.')
       
   def validate_email(self, field):
-    if self.email.data == self.orig_email:
+    if self.orig_email and self.email.data.lower() == self.orig_email.lower():
       return True
-    if db.session.query(User).filter_by(email=self.email.data).count() > 0:
+    if User.query.filter(func.lower(User.email)==self.email.data.lower()).count() > 0:
       raise ValidationError('Email already exists.')

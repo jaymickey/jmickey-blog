@@ -21,13 +21,13 @@ function MDM( inputElement ) {
 
   this.initialize = function(){
     this.controlsElement = MDM.Utils.appendControls( inputElement );
-    this.previewElement  = MDM.Utils.appendPreview( inputElement );
+//    this.previewElement  = MDM.Utils.appendPreview( inputElement );
 
-    this.activatePreview( this.inputElement, this.previewElement );
+//    this.activatePreview( this.inputElement, this.previewElement );
     this.activateControls( this.controlsElement );
-    this.activateInput( this.inputElement, this.controlsElement, this.previewElement );
+    this.activateInput( this.inputElement, this.controlsElement/*, this.previewElement*/ );
 
-    this.updatePreview();
+//    this.updatePreview();
   };
 
   this.click_on_control = false;
@@ -167,17 +167,17 @@ MDM.Utils = {
     var template =
       "<div class=\"mdm-buttons mdm-control\">" +
       "  <ul>" +
-      "    <li class=\"mdm-bold\"><a class=\"mdm-icon-bold\" href=\"#mdm-bold\"><span>B</span></a></li>" +
-      "    <li class=\"mdm-italic\"><a class=\"mdm-icon-italic\" href=\"#mdm-italic\"><span>I</span></a></li>" +
-      "    <li class=\"mdm-link\"><a class=\"mdm-icon-link\" href=\"#mdm-link\"><span>a</span></a></li>" +
-      "    <li class=\"mdm-list\"><a class=\"mdm-icon-list\" href=\"#mdm-list\"><span>l</span></a></li>" +
-      "    <li class=\"mdm-title\"><a class=\"mdm-icon-title\" href=\"#mdm-title\"><span>T</span></a></li>" +
+      "    <li class=\"mdm-bold\"><a class=\"mdm-icon-bold\" href=\"#mdm-bold\" tabindex=\"-1\"><span>B</span></a></li>" +
+      "    <li class=\"mdm-italic\"><a class=\"mdm-icon-italic\" href=\"#mdm-italic\" tabindex=\"-1\"><span>I</span></a></li>" +
+      "    <li class=\"mdm-link\"><a class=\"mdm-icon-link\" href=\"#mdm-link\" tabindex=\"-1\"><span>a</span></a></li>" +
+      "    <li class=\"mdm-list\"><a class=\"mdm-icon-list\" href=\"#mdm-list\" tabindex=\"-1\"><span>l</span></a></li>" +
+      "    <li class=\"mdm-title\"><a class=\"mdm-icon-title\" href=\"#mdm-title\" tabindex=\"-1\"><span>T</span></a></li>" +
       "  </ul>" +
       "</div>";
 
     return template;
   },
-
+  
   previewTemplate: function(){
     var template = "<div class=\"mdm-preview mdm-control\"></div>";
 
