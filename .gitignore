@@ -4,3 +4,4 @@ env/
 *.pyo
 .DS_Store
 db_repository*
+db_repository
