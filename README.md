@@ -19,6 +19,6 @@ Current it can:
 
 What needs work:
 * User permission levels
-* Post tags/categories
-* Comments (will likely be driven by disqus)
-* Static pages
+* Pagination
+* User management in admin
+* Page creation
