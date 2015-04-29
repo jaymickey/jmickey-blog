@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from app.models import User
+from app.models import User, Post
 from app import db
 from werkzeug.security import check_password_hash
 from unidecode import unidecode
@@ -14,12 +14,12 @@ class LoginForm(Form):
   remember_me = BooleanField('Remember Me', default = False)
 
   def validate_username(self, field):
-    user = User.query.filter(func.lower(username)==self.username.data.lower()).first()
+    user = User.query.filter(func.lower(User.username)==self.username.data.lower()).first()
     if user == None:
       raise ValidationError('User does not exist')
 
   def validate_password(self, field):
-    user = User.query.filter(func.lower(username)==self.username.data).first()
+    user = User.query.filter(func.lower(User.username)==self.username.data).first()
     if user != None:
       if not check_password_hash(user.password, self.password.data):
         raise ValidationError('Password is incorrect')
@@ -32,21 +32,24 @@ class RegisterForm(Form):
   password = PasswordField('Password', validators = [DataRequired()])
   
   def validate_username(self, field):
-    if User.query.filter(func.lower(username)==self.username.data.lower()).count() > 0:
+    if User.query.filter(func.lower(User.username)==self.username.data.lower()).count() > 0:
       raise ValidationError('Username already exists.')
   
   def validate_email(self, field):
-    if User.query.filter(func.lower(email)==email).count() > 0:
+    if User.query.filter(func.lower(User.email)==email).count() > 0:
       raise ValidationError('Email already in use.')
 
 class NewPost(Form):
   title = StringField('Title', validators = [DataRequired("Please enter a title!")])
+  post_short = TextAreaField('Short Post')
   post_body = TextAreaField('Post Body', validators = [DataRequired("Please enter a post body!")])
   tags = StringField('Tags', validators = [DataRequired("Please enter post tags!")])
   
   def generate_slug(self, title):
-    title_slug = unidecode(title).lower().rstrip(r' .?!(),[]{}')
-    return re.sub(r'\W+', '-', title_slug)
+    title_slug = re.sub(r'\W+', '-', unidecode(title).lower().rstrip(r' .?!(),[]{}'))
+    if Post.query.filter_by(title_slug = title_slug).count() > 0:
+      raise ValidationError('Title is already taken')
+    return title_slug
 
 class EditUser(Form):
   first_name = StringField('First Name', validators = [DataRequired("First name is required!")])

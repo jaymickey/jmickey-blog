@@ -19,6 +19,10 @@
                 {{ form.title(class_="form-control", placeholder="Enter a title...") }}
             </div>
             <div class="form-group">
+                {{ form.post_short.label }}:
+                {{ form.post_short(rows="5", class_="mdm-input form-control", placeholder="Enter short post for index page...(Optional)")}}
+            </div>
+            <div class="form-group">
                 {{ form.post_body.label }}:
                 {{ form.post_body(rows="10", class_="mdm-input form-control", placeholder="Enter post contents...") }}
             </div>

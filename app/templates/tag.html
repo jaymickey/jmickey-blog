@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
-{% set active_page = 'index' %}
 {% block content %}
                 <div class="col-md-8">
-                    {% for post in posts %}
+                    {% for post in tag.posts %}
                     <div class="post">
                         <h1 class="post-title"><a href="{{ url_for('single_post', title_slug=post.title_slug) }}">{{ post.title }}</a></h1>
                         <div class="post-author">

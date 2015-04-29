@@ -1,6 +1,6 @@
 # Python Blog
 Blog platform using python and sqlite3. Bootstrap for design. Currently imcomplete.
-Eventually it will be used to drive my future blog at jmickey.net.au, the idea being that going to all the effort to create it will give me insentive to actually update it.
+Eventually it will be used to drive my future blog at jmickey.net.au, the idea being that going to all the effort to create it will give me incentive to actually update it.
 
 # What it uses
 * [Python](http://python.org)

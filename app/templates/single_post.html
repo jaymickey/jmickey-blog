@@ -1,15 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="col-xs-12 col-md-8">
-        <div class="post">
-            <h1 class="post-title">{{ post.title }}</h1>
-            <div class="post-author">
-                Posted by <a href="{{ url_for('user_profile', username=post.author.username ) }}" class="label label-info">{{ post.author.first_name }} {{ post.author.last_name }}</a>
-            </div>
-            <div class="post-body">
-                <p>{{ post.body | markdown }}</p>
-            </div>
-        </div>
-    </div>
+                <div class="col-xs-12 col-md-8">
+                    <div class="post">
+                        <h1 class="post-title">{{ post.title }}</h1>
+                        <div class="post-author">
+                            Posted by <a href="{{ url_for('user_profile', username=post.author.username ) }}" class="label label-info">{{ post.author.first_name }} {{ post.author.last_name }}</a>{% if post.tags %} under {% for tag in post.tags %}<a href="{{ url_for('tag', tag=tag.name) }}" class="label label-success">{{ tag.name }}</a>{% if not loop.last %}, {% else %}.{% endif %}{% endfor %}{% endif %}
+                        </div>
+                        <div class="post-body">
+                            <p>{{ post.body | markdown }}</p>
+                        </div>
+                        <div class="share">
+                              <a class="btn btn-social-icon btn-twitter btn-sm" href="http://twitter.com/share?text={{ post.title }} via @JoshMichielsen&url=http://jmickey.net.au/post/{{ post.title_slug }}" target="_blank"><i class="fa fa-twitter"></i></a>
+                              <a class="btn btn-social-icon btn-facebook btn-sm" href="http://www.facebook.com/sharer/sharer.php?u=http://jmickey.net.au/post/{{ post.title_slug }}&t={{ post.title }}" target="_blank"><i class="fa fa-facebook"></i></a>
+                              <a class="btn btn-social-icon btn-google btn-sm" href="https://plus.google.com/share?url=http://jmickey.net.au/post/{{ post.title_slug }}" target="_blank"><i class="fa fa-google-plus"></i></a>
+                        </div>
+                        <div class="comments">
+                            <h3>Comments:</h3>
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                                var disqus_shortname = 'jmickey';
+                                (function() {
+                                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+                        </div>
+                    </div>
+                </div>
+                {% include 'sidebar.html' %}
 {% endblock %}
