@@ -144,7 +144,10 @@ def delete_post(id):
 def user_profile(username):
   user = User.query.filter(func.lower(User.username)==username.lower()).first()
   posts = Post.query.filter_by(user_id = user.id)
-  return render_template('user.html', title=user.username+' Profile', user=user, posts=posts)
+  return render_template('user.html',
+                          title=user.username+' Profile',
+                          user=user,
+                          posts=posts)
 
 @app.route('/profile/<username>/edit', methods=['GET', 'POST'])
 @login_required
@@ -159,7 +162,10 @@ def edit_user(username):
     db.session.commit()
     flash('Profile edited successfully!', 'alert-success')
     return redirect(url_for('user_profile', username = user.username))
-  return render_template('edit_user.html', title='Edit Profile: '+user.username, user=user, form=form)
+  return render_template('edit_user.html',
+                          title='Edit Profile: '+user.username,
+                          user=user,
+                          form=form)
   
 @app.route('/post/<title_slug>')
 def single_post(title_slug):
