@@ -4,13 +4,70 @@
         {% if title %}
         <title>{{ title }}</title>
         {% endif %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/mdmagick.css') }}" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/social.css') }}" rel="stylesheet" />
     </head>
-
-    <body>
-        
-        <div> jmickey.net.au: <a href="{{ url_for('index') }}">Home</a>
-        </div>
-        {% block content %}{% endblock %}
     
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-fixed-top navbar-inverse">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ url_for('index') }}">jmickey.net.au</a>
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li {% if active_page == 'index' %}class="active"{% endif %}><a href="{{ url_for('index') }}">Home</a></li>
+                        </ul>
+                        {% if current_user.is_authenticated() %}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hi {{ current_user.username }}!<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li {% if active_page == 'admin' %}class="active"{% endif %}><a href="{{ url_for('admin') }}">Admin</a></li>
+                                    <li {% if active_page == '{{ current_user.username }}_profile' %}class="active"{% endif %}><a href="{{ url_for('user_profile', username=current_user.username) }}">Profile</a></li>
+                                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        {% else %}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li  {% if active_page == 'login' %}class="active"{% endif %}><a href="{{ url_for('login') }}">Login</a></li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="col-md-8 alert alert-dismissable {{ category }} fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                    {% block content %}{% endblock %}
+            </div>
+        </div>
+        <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/a-tools.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ url_for('static', filename='js/showdown.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ url_for('static', filename='js/mdmagick.js') }}" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>

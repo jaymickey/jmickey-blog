@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% set active_page = 'login' %}
+
+{% block content %}
+    <form action="" method="post" name="login">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label }}: {{ form.username(size=24) }}
+        </div>
+        <div>
+            {{ form.password.label }}: {{ form.password(size=24) }}
+        </div>
+        <div>
+            {{ form.remember_me.label }}{{ form.remember_me }}
+        </div>
+        {% for fields in form %}
+        {% for error in fields.errors %}
+        <ul>
+            <li>{{ error }}</li>
+        </ul>
+        {% endfor %}
+        {% endfor %}
+        <div>
+            <input type="submit" value="Login"
+        </div>
+    </form>
+{% endblock %}

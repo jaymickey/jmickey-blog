@@ -1,0 +1,23 @@
+                <div class="col-md-4">
+                    <div class="sidebar">
+                        <div class="sidebar-content">
+                            <img id="bio-gravatar" src="https://s.gravatar.com/avatar/b3d9b66c0d46431017776efe58baa683?s=200" />
+                            <h3 id="bio-name">Josh M.</h3>
+                            <p id="bio-about">Full time systems administrator at <a href="http://www.cancerwa.asn.au">Cancer Council WA</a> and part time computer science student at <a href="http://ecu.edu.au">ECU</a>. Powershell, automation, python, android and tech enthusiast. Collector of fountain pens and proud owner of 2 adorable pets.</p>
+                        
+                            <hr />
+                        
+                            <h5>Find me on:</h5>
+                            <p><a href="http://twitter.com/JoshMichielsen">Twitter</a> <a href="https://plus.google.com/+JoshMichielsen/posts">Google+</a> <a href="https://au.linkedin.com/in/jmichielsen">LinkedIn</a>
+                            {% if all_tags %}
+                            <hr />
+                            <h5>Tags:</h5>
+                            <ul class="list-unstyled all-tags">
+                            {% for tag in all_tags %}
+                                <li><span class="glyphicon glyphicon-tag" aria-hidden="true"></span> <a href="{{ url_for('tag', tag=tag.name) }}">{{ tag.name }}</a> ({{ tag.posts.count() }})</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>

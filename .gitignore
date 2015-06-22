@@ -1,2 +1,7 @@
 env/
-app.db
+*.db
+*.pyc
+*.pyo
+.DS_Store
+db_repository*
+db_repository

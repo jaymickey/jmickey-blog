@@ -1,0 +1,104 @@
+body {
+  padding-top: 70px;
+}
+
+.sidebar {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.sidebar-content {
+  padding: 0px 20px;
+}
+
+#bio-gravatar {
+  border-radius: 50%;
+  -moz-border-radius:; 50%;s
+  -webkit-border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-top: 15px;
+}
+
+#bio-name {
+  text-align: center;
+}
+
+#bio-about {
+  padding: 10px 0px;
+  text-align: justify;
+}
+
+.all-tags {
+  padding-left: 15px;
+}
+
+.all-tags li {
+  padding-bottom: 4px;
+}
+
+.glyphicon-tag {
+  font-size: 0.8em;
+}
+
+.all-tags a {
+  color: #666;
+}
+
+.admin-glyph {
+  padding-right: 10px;
+}
+
+#current-post-title {
+  float: left;
+}
+
+.btn-new-post {
+  float: right;
+  margin-top: 10px;
+}
+
+#post-table {
+  padding-top: 15px;
+}
+
+.post-author {
+  font-size: 100%;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  line-height: 150%;
+  vertical-align: center;
+}
+
+.post-title {
+  padding-bottom: 0px;
+  margin-bottom: 2px;
+}
+
+.post-title a {
+  text-decoration: none;
+  color: #666;
+}
+
+.post-title a:hover {
+  color: #000;
+}
+
+.comments {
+  padding: 0px;
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+}
+
+div.comments h3 {
+  padding-top: 10px;
+  margin: 0px;
+}
+
+.comments-link {
+  text-align: right;
+  font-size: 16px;
+}
