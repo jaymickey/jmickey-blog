@@ -1,8 +1,8 @@
 #!env/bin/python
 
 from migrate.versioning import api
-from config.BaseConfig import SQLALCHEMY_DATABASE_URI
-from config.BaseConfig import SQLALCHEMY_MIGRATE_REPO
+from config import BaseConfig.SQLALCHEMY_DATABASE_URI
+from config import BaseConfig.SQLALCHEMY_MIGRATE_REPO
 from app import db
 import os.path
 
