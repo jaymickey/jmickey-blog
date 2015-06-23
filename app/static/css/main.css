@@ -71,10 +71,15 @@ body {
   margin-bottom: 15px;
   line-height: 150%;
   vertical-align: center;
+  color: #777;
+}
+
+.post-author .glyphicon {
+  padding-right: 2px;
 }
 
 .post-title {
-  padding-bottom: 0px;
+  padding-bottom: 5px;
   margin-bottom: 2px;
 }
 

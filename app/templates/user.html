@@ -5,7 +5,7 @@
     <div class="col-xs-12 col-md-8">
         <div class="profile">
             <h1>{{ user.first_name | safe }} {{ user.last_name | safe }} {% if current_user.is_authenticated() and current_user.username == user.username %}<small><a href="{{ url_for('edit_user', username=user.username) }}">edit</a></small>{% endif %}</h1>
-            <p>{{ user.about_me | safe }}</p>
+            {% if user.about_me %}<p>{{ user.about_me | safe }}</p>{% else %}{% if current_user.is_authenticated() and current_user.username == user.username %}<p>You should consider entering a short profile, click edit above to get started!</p>{% endif %}{% endif %}
         </div>
         <hr />
     {% if posts %}
@@ -16,8 +16,10 @@
                 Posted by <a href="{{ url_for('user_profile', username=post.author.username ) }}" class="label label-info">{{ post.author.first_name }} {{ post.author.last_name }}</a>
             </div>
             <div class="post-body">
-                <p>{{ post.body | markdown }}</p>
+                <p>{{ post.short | markdown }}</p>
             </div>
+            <div class="comments-link"><a href="{{ url_for('single_post', title_slug=post.title_slug) }}#disqus_thread"></a></div>
+            <div class="read-more"><a href ="{{ url_for('single_post', title_slug=post.title_slug) }}">Read more...</a></div>
         </div>
         {% endfor %}
     {% endif %}

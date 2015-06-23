@@ -64,8 +64,11 @@
                     {% block content %}{% endblock %}
             </div>
         </div>
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5588c1e77a8a1599" async="async"></script>
         <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        {{ moment.include_moment() }}
         <script src="{{ url_for('static', filename='js/a-tools.js') }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ url_for('static', filename='js/showdown.js') }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ url_for('static', filename='js/mdmagick.js') }}" type="text/javascript" charset="utf-8"></script>
