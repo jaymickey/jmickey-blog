@@ -4,9 +4,10 @@ from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.moment import Moment
 from flask.ext.bcrypt import Bcrypt
+import os
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object(os.environ['APP_SETTINGS'])
 moment = Moment(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
