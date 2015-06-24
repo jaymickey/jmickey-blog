@@ -5,7 +5,7 @@
                     <div class="post">
                         <h1 class="post-title">{{ post.title }}</h1>
                         <div class="post-author">
-                            <span class="glyphicon glyphicon-user"></span> Posted by <a href="{{ url_for('user_profile', username=post.author.username ) }}" class="label label-info">{{ post.author.first_name }} {{ post.author.last_name }}</a> <span class="glyphicon glyphicon-calendar"></span> {{ moment(post.timestamp).calendar() }}{% if post.tags %} <span class="glyphicon glyphicon-tags"></span>  {% for tag in post.tags %}<a href="{{ url_for('tag', tag=tag.name) }}" class="label label-success">{{ tag.name }}</a>{% if not loop.last %}, {% else %}.{% endif %}{% endfor %}{% endif %}
+                            <span class="glyphicon glyphicon-user"></span> Posted by <a href="{{ url_for('user_profile', username=post.author.username ) }}" class="label label-info">{{ post.author.first_name }} {{ post.author.last_name }}</a> <span class="glyphicon glyphicon-calendar"></span> {{ moment(post.timestamp).calendar() }}{% if post.tags %} <span class="glyphicon glyphicon-tags"></span>{% for tag in post.tags %}<a href="{{ url_for('tag', tag=tag.name) }}" class="label label-success">{{ tag.name }}</a>{% if not loop.last %}, {% else %}.{% endif %}{% endfor %}{% endif %}
                         </div>
                         <div class="share">
                               <!-- Go to www.addthis.com/dashboard to customize your tools -->

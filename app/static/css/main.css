@@ -1,6 +1,18 @@
+/*****************
+      Global
+******************/
+
 body {
   padding-top: 70px;
 }
+
+/*****************
+    End Global
+******************/
+
+/*****************
+      Sidebar
+******************/
 
 .sidebar {
   background-color: #f5f5f5;
@@ -39,13 +51,21 @@ body {
   padding-bottom: 4px;
 }
 
-.glyphicon-tag {
+.all-tags .glyphicon-tag {
   font-size: 0.8em;
 }
 
 .all-tags a {
   color: #666;
 }
+
+/*****************
+    End Sidebar
+******************/
+
+/*****************
+      Admin
+******************/
 
 .admin-glyph {
   padding-right: 10px;
@@ -64,18 +84,33 @@ body {
   padding-top: 15px;
 }
 
+/*****************
+    End Admin
+******************/
+
+/*****************
+      Post
+******************/
+
+/** All Posts **/
+
 .post-author {
   font-size: 100%;
   border-bottom: 1px solid #ccc;
   padding-bottom: 5px;
   margin-bottom: 15px;
-  line-height: 150%;
-  vertical-align: center;
-  color: #777;
+  line-height: 1.5;
+  vertical-align: baseline;
+  color: #999;
 }
 
 .post-author .glyphicon {
   padding-right: 2px;
+  padding-left: 3px;
+}
+
+.post-author .glyphicon-tags {
+  margin-right: 4px;
 }
 
 .post-title {
@@ -92,6 +127,23 @@ body {
   color: #000;
 }
 
+/** Index Post **/
+
+.post-end {
+  display: block;
+}
+
+.comments-link {
+  float: right;
+  padding-right: 10px;
+}
+
+.comments-link .glyphicon {
+  padding-right: 4px;
+}
+
+/** Single Post **/
+
 .comments {
   padding: 0px;
   margin-top: 20px;
@@ -103,7 +155,6 @@ div.comments h3 {
   margin: 0px;
 }
 
-.comments-link {
-  text-align: right;
-  font-size: 16px;
-}
+/*****************
+    End Post
+******************/

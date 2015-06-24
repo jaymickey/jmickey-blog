@@ -9,7 +9,7 @@ class BaseConfig(object):
     else:
         SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
-    SECRET_KEY = 'SECRET KEY'
+    SECRET_KEY = '\xb7\xa3f\x81\xc0i%J\x01p\xa0\xd5\xb9\xd4\x9f\xaa\xcf"y"X\xe7\xa8i'
  
 
 class ProductionConfig(BaseConfig):
