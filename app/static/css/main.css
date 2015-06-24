@@ -94,6 +94,10 @@ body {
 
 /** All Posts **/
 
+.post {
+  margin-bottom: 20px;
+}
+
 .post-author {
   font-size: 100%;
   border-bottom: 1px solid #ccc;
