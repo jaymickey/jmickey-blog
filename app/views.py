@@ -1,11 +1,11 @@
 from flask import (render_template, flash, redirect,
-                   session, url_for, request, g)
+                   url_for, request, g)
 from flask.ext.login import (login_user, logout_user,
                              current_user, login_required)
 from wtforms.validators import ValidationError
 from .models import User, Post, Tag
 from .forms import RegisterForm, LoginForm, NewPost, EditUser
-from app import app, db, lm, md, bcrypt
+from app import app, db, lm, bcrypt
 from datetime import datetime
 from sqlalchemy import func
 
@@ -171,7 +171,7 @@ def user_profile(username):
 def edit_user(username):
     user = User.query.filter(func.lower(username) == username.lower()).first()
     form = EditUser(obj=user, orig_user=user.username, orig_email=user.email)
-    if current_user.id != user.id:
+    if current_user.id != user.id and not current_user.is_admin:
         flash('Can only edit own profile!', 'alert-warning')
         return redirect(url_for('index'))
     if form.validate_on_submit():

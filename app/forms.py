@@ -2,7 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
 from app.models import User, Post
-from app import db, bcrypt
+from app import bcrypt
 from unidecode import unidecode
 from sqlalchemy import func
 import re
