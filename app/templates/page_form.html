@@ -2,8 +2,8 @@
 
 {% block content %}
     <div class='col-xs-12 col-md-8 col-md-offset-2'>
-        <h2>Edit Post</h2>
-        <form action="" method="post" name="new_post">
+        <h2>Create New Page</h2>
+        <form action="" method="post" name="new_page">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {% for field in form %}
@@ -15,19 +15,13 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
-                {{ form.title.label }}:{{ form.title(class_="form-control", placeholder="Enter a title...", tabindex="1") }}
+                {{ form.title.label }}: {{ form.title(class_="form-control", placeholder="Enter a title...", tabindex="1") }}
             </div>
             <div class="form-group">
-                {{ form.post_short.label }}:{{ form.post_short(rows="5", class_="wmd-input form-control", placeholder="Enter short post for index page...(Optional)", tabindex="2")}}
+                {{ form.content.label }}: {{ form.content(rows="15", class_="wmd-input form-control", placeholder="Enter full post contents...", tabindex="2") }}
             </div>
             <div class="form-group">
-                {{ form.post_body.label }}:{{ form.post_body(rows="10", class_="wmd-input form-control", placeholder="Enter full post contents...", tabindex="3") }}
-            </div>
-            <div class="form-group form-inline">
-                {{ form.tags.label }}: {{ form.tags(size=40, class_="form-control", placeholder="Enter tags for post...", tabindex="4") }}
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" tabindex="5"></input>
+                <input type="submit" value="Submit" class="btn btn-primary" tabindex="3"></input>
             </div>
         </form>
 

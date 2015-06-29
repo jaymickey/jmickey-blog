@@ -3,8 +3,8 @@ from flask import (render_template, flash, redirect,
 from flask.ext.login import (login_user, logout_user,
                              current_user, login_required)
 from wtforms.validators import ValidationError
-from .models import User, Post, Tag
-from .forms import RegisterForm, LoginForm, NewPost, EditUser
+from .models import User, Post, Tag, Page
+from .forms import RegisterForm, LoginForm, PostForm, EditUser, PageForm
 from app import app, db, lm, bcrypt
 from datetime import datetime
 from sqlalchemy import func
@@ -27,6 +27,18 @@ def index():
 @app.before_request
 def before_request():
     g.user = current_user
+
+
+@app.context_processor
+def get_all_tags():
+    tags = Tag.query.order_by(Tag.name)
+    return dict(all_tags=tags)
+
+
+@app.context_processor
+def get_all_pages():
+    pages = Page.query.order_by(Page.id)
+    return dict(all_pages=pages)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -72,7 +84,7 @@ def admin():
 @app.route('/admin/new_post', methods=['GET', 'POST'])
 @login_required
 def new_post():
-    form = NewPost()
+    form = PostForm()
     if form.validate_on_submit():
         post_short = form.post_short.data
         post_body = form.post_body.data
@@ -101,17 +113,19 @@ def new_post():
         db.session.commit()
         flash("New post created successfully", "alert-success")
         return redirect(url_for('admin'))
-    return render_template('new_post.html', title='Create New Post', form=form)
+    return render_template('post_form.html',
+                           title='Create New Post',
+                           form=form)
 
 
 @app.route('/admin/edit_post/<id>', methods=['GET', 'POST'])
 @login_required
 def edit_post(id):
     post = Post.query.get(id)
-    form = NewPost(title=post.title,
-                   post_short=post.short,
-                   post_body=post.body,
-                   tags=', '.join([tag.name for tag in post.tags]))
+    form = PostForm(title=post.title,
+                    post_short=post.short,
+                    post_body=post.body,
+                    tags=', '.join([tag.name for tag in post.tags]))
     if form.validate_on_submit():
         if form.title.data.lower() != post.title.lower():
             post.title = form.title.data
@@ -134,13 +148,7 @@ def edit_post(id):
         db.session.commit()
         flash("Edited post successfully", "alert-success")
         return redirect(url_for('admin'))
-    return render_template('edit_post.html', title='Edit Post', form=form)
-
-
-@app.context_processor
-def get_all_tags():
-    tags = Tag.query.order_by(Tag.name)
-    return dict(all_tags=tags)
+    return render_template('post_form.html', title='Edit Post', form=form)
 
 
 @app.route('/admin/delete_post/<id>', methods=['GET', 'POST'])
@@ -150,12 +158,17 @@ def delete_post(id):
     if request.method == 'POST':
         db.session.delete(post)
         db.session.commit()
-        flash('Post deleted successfully!', 'alerlt-success')
+        if post.tags:
+            for tag in post.tags:
+                if not tag.posts.count():
+                    db.session.delete(tag)
+                    db.session.commit()
+        flash('Post deleted successfully!', 'alert-success')
         return redirect(url_for('admin'))
     return render_template('delete_post.html', title='Delete Post', post=post)
 
 
-@app.route('/profile/<username>', methods=['GET'])
+@app.route('/profile/<username>')
 def user_profile(username):
     user = User.query.filter(func.lower(User.username) ==
                              username.lower()).first()
@@ -169,7 +182,8 @@ def user_profile(username):
 @app.route('/profile/<username>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_user(username):
-    user = User.query.filter(func.lower(username) == username.lower()).first()
+    user = User.query.filter(func.lower(User.username) ==
+                             username.lower()).first()
     form = EditUser(obj=user, orig_user=user.username, orig_email=user.email)
     if current_user.id != user.id and not current_user.is_admin:
         flash('Can only edit own profile!', 'alert-warning')
@@ -197,3 +211,33 @@ def single_post(title_slug):
 def tag(tag):
     tag = Tag.query.filter(func.lower(Tag.name) == tag.lower()).first()
     return render_template('tag.html', title='Posts under '+tag.name, tag=tag)
+
+
+@app.route('/admin/new_page', methods=['GET', 'POST'])
+@login_required
+def new_page():
+    form = PageForm()
+    if form.validate_on_submit():
+        page = Page()
+        form.populate_obj(page)
+        try:
+            page.title_slug = form.generate_slug(form.title.data)
+        except ValidationError:
+            form.title.errors.append('Title is already taken.')
+        else:
+            db.session.add(page)
+            db.session.commit()
+            flash('Page created successfully!', 'alert-success')
+            return redirect(url_for('admin'))
+    return render_template('page_form.html',
+                           title='New Page',
+                           form=form)
+
+
+@app.route('/page/<page_title>')
+def page(page_title):
+    page = Page.query.filter(func.lower(Page.title) ==
+                             page_title.lower()).first()
+    return render_template('page.html',
+                           title=page.title,
+                           page=page)

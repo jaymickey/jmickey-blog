@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% set active_page = '{{ current_user.username }}_profile' %}
+{% set active_page = '{{ user.username }}_profile' %}
 
 {% block content %}
     <div class="col-md-8 col-sm-7">
@@ -23,9 +23,9 @@
         {% endfor %}
     {% endif %}
     </div>
-    
+
     {% include 'sidebar.html' %}
-    
+
     <script type="text/javascript">
         var disqus_shortname = 'jmickey';
         (function () {
@@ -35,5 +35,5 @@
             (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
         }());
     </script>
-        
+
 {% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% set active_page = '{{ page.title }}' %}
+
+{% block content %}
+    <div class="col-md-8 col-sm-7">
+        {{ page.content | markdown }}
+    </div>
+
+    {% include 'sidebar.html' %}
+
+{% endblock %}

@@ -2,6 +2,9 @@ from app import db
 
 
 class User(db.Model):
+
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40))
     last_name = db.Column(db.String(40))
@@ -34,11 +37,14 @@ post_tags = db.Table('tags',
                                db.ForeignKey('tag.id')),
                      db.Column('post_id',
                                db.Integer,
-                               db.ForeignKey('post.id'))
+                               db.ForeignKey('posts.id'))
                      )
 
 
 class Post(db.Model):
+
+    __tablename__ = 'posts'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), index=True, unique=True)
     title_slug = db.Column(db.String(), unique=True)
@@ -47,9 +53,22 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime)
     tags = db.relationship('Tag', secondary=post_tags,
                            backref=db.backref('posts', lazy='dynamic'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 class Tag(db.Model):
+
+    __tablename__ = 'tag'
+
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(24), unique=True)
+
+
+class Page(db.Model):
+
+    __tablename__ = 'pages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(20), index=True, unique=True)
+    title_slug = db.Column(db.String(), unique=True)
+    content = db.Column(db.String)
