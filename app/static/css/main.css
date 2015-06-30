@@ -89,6 +89,58 @@ body {
 ******************/
 
 /*****************
+  Admin Sidebar
+******************/
+
+@media (min-width: 1200px)
+.admin-sidebar {
+  width: 260px;
+}
+
+@media (min-width: 992px)
+.admin-sidebar {
+  position: fixed;
+  top: 20px;
+  width: 213px;
+}
+
+@media (min-width: 768px)
+.admin-sidebar {
+  padding-left: 20px;
+}
+
+@media (min-width: 992px)
+.admin-sidebar .nav {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.admin-sidebar .nav>li>a {
+  display: block;
+  padding: 4px 20px;
+  font-weight: 400;
+  color: #878787;
+}
+
+.admin-sidebar .nav>li>a:hover,
+.admin-sidebar .nav>li.a:focus {
+  padding-left: 19px;
+  background-color: transparent;
+  border-left: 1px solid #563d7c;
+  color: #563d7c;
+}
+
+.admin-sidebar .nav>.active>a:focus,
+.admin-sidebar .nav>.active>a:hover,
+.admin-sidebar .nav>.active>a {
+  padding-left: 18px;
+  border-left: 2px solid #563d7c;
+  color: #563d7c;
+  font-weight: 700;
+  background-color: transparent;
+}
+
+/*****************
       Post
 ******************/
 

@@ -2,8 +2,8 @@
 {% set active_page = 'admin' %}
 
 {% block content %}
-    <div class="col-xs-12 col-sm-7 col-md-8">
-        <div class="row">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-9">
             <h2>Welcome {{ current_user.first_name }}</h2>
             <h3 id="current-post-title">Current Posts:</h3>
             <a href="{{ url_for('new_post') }}" class="btn btn-primary btn-new-post">Create Post</a>
@@ -33,5 +33,22 @@
                 </table>
             </div>
         </div>
+        <div class="col-xs-12 col-sm-4 col-md-3">
+            <nav class="admin-sidebar affix hidden-print hidden-sm hidden-xs">
+                <ul class="nav">
+                    <li class="admin-sidebar-title"><h4>Page Contents</h4></li>
+                    <li><a href="#post-table">Posts</a></li>
+                    <li><a href="#pages-table">Pages</a></li>
+                </ul>
+            </nav>
+        </div>
     </div>
+
+<script>
+    $(".nav li").on("click", function() {
+      $(".nav li").removeClass("active");
+      $(this).addClass("active");
+    });
+
+</script>
 {% endblock %}
