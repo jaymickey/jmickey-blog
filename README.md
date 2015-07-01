@@ -16,9 +16,11 @@ Current it can:
 * Register/Login/Logout users
 * Create/Edit/Delete posts
 * Display user profiles + Edit your own profile
+* Create pages
 
 What needs work:
-* User permission levels
+* User permission levels - admin/non-admin users
 * Pagination
 * User management in admin
-* Page creation
+* Post/Page preview
+* Page edit/delete
