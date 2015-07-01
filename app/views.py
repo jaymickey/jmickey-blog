@@ -76,7 +76,7 @@ def logout():
 @app.route('/admin')
 @login_required
 def admin():
-    posts = Post.query.filter_by(user_id=current_user.id)
+    posts = Post.query.filter_by(user_id=g.user.id)
     posts = posts.order_by(Post.id.desc())
     return render_template('admin.html', title='Admin Home', posts=posts)
 
@@ -86,33 +86,34 @@ def admin():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
+        post_title = form.title.data.lstrip().rstrip()
         post_short = form.post_short.data
         post_body = form.post_body.data
         try:
-            title_slug = form.generate_slug(form.title.data)
+            title_slug = form.generate_slug(post_title)
         except ValidationError:
             form.title.errors.append('Title is already taken.')
         else:
-            post = Post(title=form.title.data,
+            post = Post(title=post_title,
                         title_slug=title_slug,
                         short=post_short,
                         body=post_body,
                         timestamp=datetime.utcnow(),
-                        user_id=current_user.id)
-        tags = form.tags.data.split(', ')
-        for tag in tags:
-            if Tag.query.filter(func.lower(Tag.name) == tag.lower()).first():
-                pass
-            else:
-                new_tag = Tag(name=tag)
-                db.session.add(new_tag)
-                db.session.commit()
-            tag = Tag.query.filter(func.lower(Tag.name) == tag.lower()).first()
-            post.tags.append(tag)
-        db.session.add(post)
-        db.session.commit()
-        flash("New post created successfully", "alert-success")
-        return redirect(url_for('admin'))
+                        user_id=g.user.id)
+            tags = form.tags.data.split(', ')
+            for tag in tags:
+                if not Tag.query.filter(func.lower(Tag.name) ==
+                                        tag.lower()).first():
+                    new_tag = Tag(name=tag)
+                    db.session.add(new_tag)
+                    db.session.commit()
+                get_tag = Tag.query.filter(func.lower(Tag.name) ==
+                                           tag.lower()).first()
+                post.tags.append(get_tag)
+            db.session.add(post)
+            db.session.commit()
+            flash("New post created successfully", "alert-success")
+            return redirect(url_for('admin'))
     return render_template('post_form.html',
                            title='Create New Post',
                            form=form)
@@ -127,27 +128,30 @@ def edit_post(id):
                     post_body=post.body,
                     tags=', '.join([tag.name for tag in post.tags]))
     if form.validate_on_submit():
-        if form.title.data.lower() != post.title.lower():
-            post.title = form.title.data
-            post.title_slug = form.generate_slug(form.title.data,
-                                                 orig_title=post.title)
-        post.short = form.post_short.data
-        post.body = form.post_body.data
-        tags = form.tags.data.split(', ')
-        for tag in tags:
-            if Tag.query.filter(func.lower(Tag.name) == tag.lower()).first():
-                pass
-            else:
-                new_tag = Tag(name=tag)
-                db.session.add(new_tag)
-                db.session.commit()
-            tag = Tag.query.filter(func.lower(Tag.name) == tag.lower()).first()
-            if tag in post.tags:
-                continue
-            post.tags.append(tag)
-        db.session.commit()
-        flash("Edited post successfully", "alert-success")
-        return redirect(url_for('admin'))
+        try:
+            post_title = form.title.data.lstrip().rstrip()
+            if not post_title.lower() == post.title.lower():
+                post.title_slug = form.generate_slug(post_title)
+        except:
+            form.title.errors.append('Title is already taken.')
+        else:
+            post.title = post_title
+            post.short = form.post_short.data
+            post.body = form.post_body.data
+            tags = form.tags.data.split(', ')
+            for tag in tags:
+                if not Tag.query.filter(func.lower(Tag.name) ==
+                                        tag.lower()).first():
+                    new_tag = Tag(name=tag)
+                    db.session.add(new_tag)
+                    db.session.commit()
+                tag = Tag.query.filter(func.lower(Tag.name) ==
+                                       tag.lower()).first()
+                if tag not in post.tags:
+                    post.tags.append(tag)
+            db.session.commit()
+            flash("Edited post successfully", "alert-success")
+            return redirect(url_for('admin'))
     return render_template('post_form.html', title='Edit Post', form=form)
 
 
@@ -185,7 +189,7 @@ def edit_user(username):
     user = User.query.filter(func.lower(User.username) ==
                              username.lower()).first()
     form = EditUser(obj=user, orig_user=user.username, orig_email=user.email)
-    if current_user.id != user.id and not current_user.is_admin:
+    if not g.user.id == user.id and not g.user.is_admin:
         flash('Can only edit own profile!', 'alert-warning')
         return redirect(url_for('index'))
     if form.validate_on_submit():
@@ -234,10 +238,22 @@ def new_page():
                            form=form)
 
 
-@app.route('/page/<page_title>')
-def page(page_title):
-    page = Page.query.filter(func.lower(Page.title) ==
-                             page_title.lower()).first()
+@app.route('/admin/edit_page/<id>', methods=['GET', 'POST'])
+def edit_page(id):
+    page = Page.query.get(id)
+    form = PageForm(obj=page)
+    if form.validate_on_submit():
+        if not form.title.data.lower() == page.title.lower():
+            pass
+    return render_template('page_form.html',
+                           title='Edit Page',
+                           form=form)
+
+
+@app.route('/page/<page_slug>')
+def page(page_slug):
+    page = Page.query.filter(func.lower(Page.title_slug) ==
+                             page_slug.lower()).first()
     return render_template('page.html',
                            title=page.title,
                            page=page)
